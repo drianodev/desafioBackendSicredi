@@ -2,22 +2,17 @@ package br.com.drianodev.backendapi.service.impl;
 
 import br.com.drianodev.backendapi.exception.NotFoundException;
 import br.com.drianodev.backendapi.exception.PautaNotFoundException;
-import br.com.drianodev.backendapi.exception.SessaoNotFoundException;
-import br.com.drianodev.backendapi.model.dto.ResultadoVotacaoDTO;
 import br.com.drianodev.backendapi.model.dto.SessaoDTO;
 import br.com.drianodev.backendapi.model.entity.Pauta;
 import br.com.drianodev.backendapi.model.entity.Sessao;
 import br.com.drianodev.backendapi.repository.PautaRepository;
 import br.com.drianodev.backendapi.repository.SessaoRepository;
 import br.com.drianodev.backendapi.service.SessaoService;
-import br.com.drianodev.backendapi.service.VotoService;
 import br.com.drianodev.backendapi.utils.MapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -26,12 +21,6 @@ import java.util.stream.Collectors;
 public class SessaoServiceImpl implements SessaoService {
 
     private static final Logger LOGGER = Logger.getLogger(SessaoServiceImpl.class.getName());
-
-    @Autowired
-    private KafkaTemplate<String, Object> kafkaTemplate;
-
-    @Autowired
-    private VotoService votoService;
 
     @Autowired
     private SessaoRepository sessaoRepository;
@@ -118,64 +107,6 @@ public class SessaoServiceImpl implements SessaoService {
             LOGGER.severe("Erro ao buscar sessão por ID: " + e.getMessage());
             // Propaga a exceção para tratamento adequado no controlador, se necessário
             throw e;
-        }
-    }
-
-    public void encerrarSessao(Long idSessao) {
-        try {
-            // Obter a sessão
-            Sessao sessao = obterSessao(idSessao);
-
-            // Validar se a sessão ainda está aberta ou expirou
-            if (!validarSessao(sessao)) {
-                LOGGER.warning("Sessão para votação não está aberta ou expirou.");
-                // Sessão para votação não está aberta ou expirou
-                return;
-            }
-
-            // Encerrar a sessão
-            LocalDateTime now = LocalDateTime.now();
-            LocalDateTime fimSessao = sessao.getDataSessao().plus(sessao.getDuracao());
-
-            if (now.isAfter(fimSessao)) {
-                LOGGER.info("Sessão expirou. Encerrando sessão...");
-
-                // Lógica específica para encerrar a sessão quando expirar
-                // ...
-
-                // Contabilizar os votos
-                ResultadoVotacaoDTO resultadoVotacao = votoService.contabilizarVotos(sessao.getPauta().getId());
-
-                // Enviar mensagem para o Kafka com o resultado
-                enviarResultadoVotacao(resultadoVotacao);
-            } else {
-                LOGGER.info("Sessão ainda está aberta. Não será encerrada neste momento.");
-            }
-        } catch (Exception e) {
-            LOGGER.severe("Erro ao encerrar sessão: " + e.getMessage());
-            // Propaga a exceção para tratamento adequado no controlador, se necessário
-            throw e;
-        }
-    }
-
-    private Sessao obterSessao(Long idSessao) {
-        return sessaoRepository.findById(idSessao)
-                .orElseThrow(() -> new SessaoNotFoundException("Sessão não encontrada"));
-    }
-
-    private boolean validarSessao(Sessao sessao) {
-        // Verificar se a sessão está dentro do período de votação
-        LocalDateTime now = LocalDateTime.now();
-        return now.isAfter(sessao.getDataSessao()) && now.isBefore(sessao.getDataSessao().plus(sessao.getDuracao()));
-    }
-
-    private void enviarResultadoVotacao(ResultadoVotacaoDTO resultadoVotacao) {
-        try {
-            kafkaTemplate.send("resultado-votacao-topic", resultadoVotacao);
-            LOGGER.info("Resultado da votação enviado para o Kafka.");
-        } catch (Exception e) {
-            LOGGER.severe("Erro ao enviar resultado da votação para o Kafka: " + e.getMessage());
-            // Tratar a exceção conforme necessário
         }
     }
 }
