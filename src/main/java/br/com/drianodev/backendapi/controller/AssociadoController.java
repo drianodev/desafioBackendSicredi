@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/associado")
@@ -27,6 +28,11 @@ public class AssociadoController {
     @PostMapping(headers = "Api-Version=1")
     public ResponseEntity<AssociadoDTO> cadastrarAssociado(@RequestBody AssociadoDTO associadoDTO) {
         try {
+            String cpf = associadoDTO.getCpf();
+            if (!isValidCpf(cpf)) {
+                LOGGER.warning("Tentativa de cadastrar associado com CPF inválido.");
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
             AssociadoDTO novoAssociado = associadoService.cadastrarAssociado(associadoDTO);
             return new ResponseEntity<>(novoAssociado, HttpStatus.CREATED);
         } catch (CpfInvalidoException e) {
@@ -39,6 +45,11 @@ public class AssociadoController {
             LOGGER.warning("Erro ao cadastrar associado: " + e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private boolean isValidCpf(String cpf) {
+        // Utiliza expressão regular para verificar se o CPF contém apenas números
+        return Pattern.matches("\\d+", cpf);
     }
 
     @GetMapping(headers = "Api-Version=1")
