@@ -60,9 +60,7 @@ aplicação se comporta
   - Como você versionaria a API da sua aplicação? Que estratégia usar?
 
 ---
-Vamos criar um README básico para sua aplicação. Certifique-se de personalizar as seções conforme necessário para fornecer as informações específicas da sua aplicação.
 
----
 # Orientações
 
 ## Servidor: https://sessoes-votacao-api.onrender.com
