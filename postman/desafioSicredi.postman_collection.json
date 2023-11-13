@@ -1,0 +1,395 @@
+{
+	"info": {
+		"_postman_id": "5cb9df7b-aa2a-4e4b-9d68-ff5cb15568ad",
+		"name": "desafioSicredi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22099089"
+	},
+	"item": [
+		{
+			"name": "Associado",
+			"item": [
+				{
+					"name": "cadastrarAssociado",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Api-Version",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Nome\",\r\n    \"cpf\": \"84610162032\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/associado",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"associado"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listarTodosAssociados",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Api-Version",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/associado",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"associado"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "buscarAssociadoPorId",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Api-Version",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/associado/8",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"associado",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "habilitacaoVoto",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Api-Version",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/associado/verificar-habilitacao-voto/84610162032",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"associado",
+								"verificar-habilitacao-voto",
+								"84610162032"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pauta",
+			"item": [
+				{
+					"name": "cadastrarPauta",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Api-Version",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"titulo\": \"Pauta 10\",\r\n  \"descricao\": \"Esta é uma descrição de exemplo para a pauta.\",\r\n  \"cpfAssociado\": \"84610162032\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/pauta",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pauta"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listarTodos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Api-Version",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/pauta",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pauta"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "buscarPorId",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Api-Version",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/pauta/buscar/9",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pauta",
+								"buscar",
+								"9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Voto",
+			"item": [
+				{
+					"name": "votar",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Api-Version",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cpfAssociado\": \"84610162032\",\r\n  \"idPauta\": 9,\r\n  \"voto\": \"sim\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/voto",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"voto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "votosPorPauta",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Api-Version",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/voto/pauta/9",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"voto",
+								"pauta",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "contabilizarVotos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Api-Version",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/voto/resultado/9",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"voto",
+								"resultado",
+								"9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sessao",
+			"item": [
+				{
+					"name": "abrirSessao",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Api-Version",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"pauta\": 9,\r\n    \"dataSessao\": \"2023-11-13T13:59:00\",\r\n    \"duracao\": \"PT10M\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/sessao",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sessao"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listarSessoes",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Api-Version",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/sessao",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sessao"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "buscarPorId",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Api-Version",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/sessao/13",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sessao",
+								"13"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
