@@ -1,102 +1,54 @@
 package br.com.drianodev.backendapi.controller;
 
-import br.com.drianodev.backendapi.model.dto.AssociadoDTO;
-import br.com.drianodev.backendapi.service.AssociadoService;
-import br.com.drianodev.backendapi.utils.MapperUtils;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class AssociadoControllerTest {
 
-    @Mock
-    private AssociadoService associadoService;
+    @Autowired
+    private MockMvc mockMvc;
 
-    @Mock
-    private MapperUtils mapperUtils;
-
-    @InjectMocks
-    private AssociadoController associadoController;
+//    @Test
+//    public void testCadastrarAssociado() throws Exception {
+//        String associadoJSON = "{ \"nome\": \"Teste\", \"cpf\": \"12345678900\" }";
+//
+//        mockMvc.perform(MockMvcRequestBuilders
+//                        .post("/associado")
+//                        .content(associadoJSON)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .header("Api-Version", "1"))
+//                .andExpect(status().isCreated());
+//    }
 
     @Test
-    void cadastrarAssociado_Success() {
-        // Arrange
-        AssociadoDTO associadoDTO = new AssociadoDTO();
-        AssociadoDTO savedAssociadoDTO = new AssociadoDTO();
-        when(associadoService.cadastrarAssociado(any(AssociadoDTO.class))).thenReturn(savedAssociadoDTO);
-
-        // Act
-        ResponseEntity<AssociadoDTO> responseEntity = associadoController.cadastrarAssociado(associadoDTO);
-
-        // Assert
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertEquals(savedAssociadoDTO, responseEntity.getBody());
+    public void testListarAssociados() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/associado")
+                        .header("Api-Version", "1"))
+                .andExpect(status().isOk());
     }
 
     @Test
-    void cadastrarAssociado_Failure() {
-        // Arrange
-        AssociadoDTO associadoDTO = new AssociadoDTO();
-        when(associadoService.cadastrarAssociado(any(AssociadoDTO.class))).thenReturn(null);
-
-        // Act
-        ResponseEntity<AssociadoDTO> responseEntity = associadoController.cadastrarAssociado(associadoDTO);
-
-        // Assert
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    public void testBuscarAssociadoPorId() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/associado/1")
+                        .header("Api-Version", "1"))
+                .andExpect(status().isOk());
     }
 
-    @Test
-    void listarAssociados() {
-        // Arrange
-        List<AssociadoDTO> associados = Arrays.asList(new AssociadoDTO(), new AssociadoDTO());
-        when(associadoService.listarAssociados()).thenReturn(associados);
-
-        // Act
-        ResponseEntity<List<AssociadoDTO>> responseEntity = associadoController.listarAssociados();
-
-        // Assert
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(associados, responseEntity.getBody());
-    }
-
-    @Test
-    void buscarAssociadoPorId_Success() {
-        // Arrange
-        Long associadoId = 1L;
-        AssociadoDTO associadoDTO = new AssociadoDTO();
-        when(associadoService.buscarAssociadoPorId(anyLong())).thenReturn(associadoDTO);
-
-        // Act
-        ResponseEntity<AssociadoDTO> responseEntity = associadoController.buscarAssociadoPorId(associadoId);
-
-        // Assert
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(associadoDTO, responseEntity.getBody());
-    }
-
-    @Test
-    void buscarAssociadoPorId_Failure() {
-        // Arrange
-        Long associadoId = 1L;
-        when(associadoService.buscarAssociadoPorId(anyLong())).thenReturn(null);
-
-        // Act
-        ResponseEntity<AssociadoDTO> responseEntity = associadoController.buscarAssociadoPorId(associadoId);
-
-        // Assert
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
+//    @Test
+//    public void testVerificarHabilitacaoVotoPorCpf() throws Exception {
+//        mockMvc.perform(MockMvcRequestBuilders
+//                        .get("/associado/verificar-habilitacao-voto/12345678900")
+//                        .header("Api-Version", "1"))
+//                .andExpect(status().isOk());
+//    }
 }

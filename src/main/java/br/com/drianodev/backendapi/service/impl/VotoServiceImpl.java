@@ -87,21 +87,29 @@ public class VotoServiceImpl implements VotoService {
     }
 
     private boolean validarSessaoParaVotacao(Long idPauta) {
-        // Obter a sessão da pauta
         Optional<Sessao> optionalSessao = sessaoRepository.findByPauta_Id(idPauta);
 
         if (optionalSessao.isPresent()) {
             Sessao sessao = optionalSessao.get();
 
-            // Verificar se a sessão está dentro do período de votação
             LocalDateTime now = LocalDateTime.now();
-            if (now.isBefore(sessao.getDataSessao()) || now.isAfter(sessao.getDataSessao().plus(sessao.getDuracao()))) {
+            LocalDateTime inicioSessao = sessao.getDataSessao();
+            LocalDateTime fimSessao = sessao.getDataSessao().plus(sessao.getDuracao());
+
+            if (now.isBefore(inicioSessao)) {
+                LOGGER.warning("Sessão ainda não começou. Início: " + inicioSessao);
+                return false;
+            }
+
+            if (now.isAfter(fimSessao)) {
+                LOGGER.warning("Sessão já expirou. Fim: " + fimSessao);
                 return false;
             }
 
             return true;
         }
 
+        LOGGER.warning("Sessão não encontrada para a pauta com ID: " + idPauta);
         return false;
     }
 

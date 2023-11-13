@@ -63,10 +63,6 @@ public class SessaoServiceImpl implements SessaoService {
             sessao.setDataSessao(sessaoDTO.getDataSessao());
             sessao.setDuracao(duracao);
 
-            // Calcula a data de encerramento da sessão
-            LocalDateTime dataFim = sessaoDTO.getDataSessao().plus(duracao);
-            sessao.setDataSessao(dataFim);
-
             // Salva a sessão
             sessao = sessaoRepository.save(sessao);
 
