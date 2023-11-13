@@ -20,6 +20,6 @@ public class Pauta {
     private String descricao;
 
     @ManyToOne
-    @JoinColumn(name = "id_associado")
+    @JoinColumn(name = "id_associado", nullable = false)
     private Associado associado;
 }

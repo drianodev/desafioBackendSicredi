@@ -16,8 +16,8 @@ public class Sessao {
     @Column(name = "id_sessao")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "id_pauta")
+    @OneToOne
+    @JoinColumn(name = "id_pauta", unique = true)
     private Pauta pauta;
 
     @Column(name = "data_sessao", nullable = false)

@@ -1,10 +1,7 @@
 package br.com.drianodev.backendapi.utils;
 
-import br.com.drianodev.backendapi.model.enums.VotoOpcao;
-import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
-import org.modelmapper.spi.MappingContext;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

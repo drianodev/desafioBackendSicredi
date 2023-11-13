@@ -9,5 +9,5 @@ public interface VotoService {
 
     VotoDTO votar(VotoDTO votoDTO);
     List<VotoDTO> buscarTodosVotosPorPauta(Long idPauta);
-    public ResultadoVotacaoDTO contabilizarVotos(Long idPauta);
+    ResultadoVotacaoDTO contabilizarVotos(Long idPauta);
 }

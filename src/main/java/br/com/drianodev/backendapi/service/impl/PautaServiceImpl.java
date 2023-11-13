@@ -33,28 +33,20 @@ public class PautaServiceImpl implements PautaService {
     @Override
     public PautaDTO cadastrarPauta(PautaDTO pautaDTO) {
         try {
-            // Verifica se o associado com o CPF fornecido existe
             AssociadoDTO associadoDTO = associadoService.buscarAssociadoPorCpf(pautaDTO.getCpfAssociado());
 
-            // Mapeia a PautaDTO para a entidade Pauta
             Pauta pauta = mapperUtils.convert(pautaDTO, Pauta.class);
 
-            // Mapeia o AssociadoDTO para a entidade Associado e associa à Pauta
             Associado associado = mapperUtils.convert(associadoDTO, Associado.class);
             pauta.setAssociado(associado);
 
-            // Salva a Pauta no repositório
             Pauta savedPauta = pautaRepository.save(pauta);
-
-            // Converte a entidade salva para DTO e retorna
             return mapperUtils.convert(savedPauta, PautaDTO.class);
         } catch (NotFoundException e) {
             LOGGER.warning("Associado não encontrado ao cadastrar pauta: " + e.getMessage());
-            // Propaga a exceção para tratamento adequado no controlador, se necessário
             throw e;
         } catch (Exception e) {
             LOGGER.severe("Erro ao cadastrar pauta: " + e.getMessage());
-            // Propaga a exceção para tratamento adequado no controlador, se necessário
             throw e;
         }
     }
